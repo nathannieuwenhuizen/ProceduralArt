@@ -8,13 +8,18 @@ public class CameraMovement : MonoBehaviour
     private float maxUpAngle = 70;
     private float maxDownAngle = 70;
 
+    [SerializeField]
     private float speed = 5f;
 
-    private float maxZoom = 2;
     private float minZoom = 10;
+    private float maxZoom = 40;
 
+    [SerializeField]
     private float currentZoom;
+    [SerializeField]
     private float destZoom;
+    [SerializeField]
+    private float zoomSpeed = 5f;
 
     private Vector2 angleDelta;
 
@@ -23,15 +28,26 @@ public class CameraMovement : MonoBehaviour
 
     void Start()
     {
-        currentZoom = minZoom;
+        destZoom = currentZoom = minZoom + (maxZoom - minZoom) * 0.5f;
     }
 
     void Update()
     {
+        Debug.Log("scroll " + Input.GetAxis("Mouse ScrollWheel"));
+        destZoom += Input.GetAxis("Mouse ScrollWheel") * -20f;
+        destZoom = Globals.Cap(destZoom, minZoom, maxZoom);
+        currentZoom = Mathf.Lerp(currentZoom, destZoom, Time.deltaTime * zoomSpeed);
+
+        Vector3 delta = cameraTransform.position - transform.position;
+        delta.Normalize();
+        delta *= currentZoom;
+        cameraTransform.position = transform.position + delta;
+
+
         angleDelta.y = -Input.GetAxis("Horizontal");
         angleDelta.x = Input.GetAxis("Vertical");
 
-        transform.Rotate(angleDelta);
+        transform.Rotate(angleDelta * speed);
         Quaternion q = transform.rotation;
         Vector3 cappedRot = new Vector3(q.eulerAngles.x, q.eulerAngles.y, 0);
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Leaf : MonoBehaviour
+public class Leaf : PoolObject
 {
 
     [SerializeField]
@@ -32,12 +32,17 @@ public class Leaf : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //UpdateMesh(CalculateEulerSpiral(2f, subDivisions, 10));
+        //RollOut();
+    }
+
+    private void Setup()
+    {
         _meshFilter = GetComponent<MeshFilter>();
         if (_meshFilter == null)
         {
             _meshFilter = gameObject.AddComponent<MeshFilter>();
         }
-
 
         _meshRenderer = GetComponent<MeshRenderer>();
         if (_meshRenderer == null)
@@ -47,19 +52,37 @@ public class Leaf : MonoBehaviour
         mesh = new Mesh();
         _meshFilter.mesh = mesh;
 
-        UpdateMesh(CalculateEulerSpiral(2f, subDivisions, 10));
-        RollOut();
-
     }
+
+    public override void Destroy()
+    {
+        Debug.Log("destroy");
+        transform.parent.gameObject.SetActive(false);
+        //base.Destroy();
+    }
+
+    public void RollOut()
+    {
+        StopAllCoroutines();
+        if (mesh == null)
+        {
+            Setup();
+        }
+        StartCoroutine(RollingOut());
+    }
+
     IEnumerator RollingOut()
     {
         float i = beginstand;
-        while (i > endStand)
+        while (i > endStand + 0.1f)
         {
             UpdateMesh(CalculateEulerSpiral( i, subDivisions, planeSize.y));
             i = Mathf.Lerp(i, endStand, 1f/60f * rollOutSpeed);
             yield return new WaitForSeconds(1f/60f);
         }
+
+        yield return new WaitForSeconds(2f);
+        Destroy();
     }
 
     List<Vector2> CalculateEulerSpiral(float T, float steps, float size = 10f)
@@ -110,6 +133,7 @@ public class Leaf : MonoBehaviour
         mesh.vertices = vertices;
         if (mesh.triangles.Length != subDivisions * 6)
         {
+
             int[] triangles = new int[subDivisions * 6];
             for (int i = 0; i < subDivisions; i++)
             {
@@ -139,18 +163,12 @@ public class Leaf : MonoBehaviour
 
     }
 
-    public void RollOut()
-    {
-        StopAllCoroutines();
-        StartCoroutine(RollingOut());
-    }
-
     //purely for testing
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            RollOut();
+            //RollOut();
         }
     }
 }

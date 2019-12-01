@@ -91,7 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 701f5208b6f02eb4283e0adda7f1d5f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  subDivisions: 20
+  subDivisions: 15
   planeSize: {x: 5, y: 10}
   rollFromAbove: 1
   rollOutSpeed: 10

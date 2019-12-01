@@ -38,7 +38,8 @@ public class Plant : MonoBehaviour
     public Vector3 topPosition;
 
     private PlantState state = PlantState.growing;
-    private BranchFormation branchFormation = BranchFormation.wave;
+    [SerializeField]
+    private BranchFormation branchFormation = BranchFormation.circle;
     void Start()
     {
         topPosition = transform.position;
@@ -46,6 +47,7 @@ public class Plant : MonoBehaviour
 
         StartGrowing();
 
+        PoolManager.instance.CreatePool(leafObject, 2);
         StartCoroutine(spawningTest());
 
     }
@@ -95,8 +97,9 @@ public class Plant : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SpawnBranch(branches[0]);
+            SpawnBranch(branches[branches.Count - 1]);
         }
+
         if (state == PlantState.growing)
         {
             UpdateFormation();
@@ -117,7 +120,7 @@ public class Plant : MonoBehaviour
         {
             case BranchFormation.wave:
                 float waveSpeed = 3f;
-                float waveAmplitude = 20f;
+                float waveAmplitude = 10f;
                 float gapBetweenBranches = 3f;
                 for (int i = 0; i < branches.Count; i++)
                 {
@@ -126,6 +129,17 @@ public class Plant : MonoBehaviour
                     //Debug.Log(branches[i].desiredPos);
                 }
                 break;
+            case BranchFormation.circle:
+                for (int i = 0; i < branches.Count; i++)
+                {
+                    float circleSpeed = 3f / ( 1 + (float)branches.Count / 2);
+                    float circleSize = Mathf.Max(10, branches.Count * 1);
+                    branches[i].desiredPos.x = Mathf.Cos(Time.time * circleSpeed + (i * (Mathf.PI * 2f / (float)branches.Count))) * circleSize;
+                    branches[i].desiredPos.z = Mathf.Sin(Time.time * circleSpeed + (i * (Mathf.PI * 2f / (float)branches.Count))) * circleSize;
+                    //Debug.Log(branches[i].desiredPos);
+                }
+                break;
+
         }
     }
 

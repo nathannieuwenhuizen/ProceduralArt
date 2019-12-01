@@ -8,18 +8,22 @@ public class Branch : MonoBehaviour
     [SerializeField]
     private Material material;
     private TubeRenderer tubeRenderer;
-    private float maxSectionSize = 5f;
-    private int maxListSize = 20;
+    private float maxSectionSize = 2f;
+    private int maxListSize = 50;
     public Vector3 currentPos;
     public Vector3 desiredPos;
 
     public List<Vector3> positions;
 
-    public float transitionSpeed = .5f;
+    public Transform transformTop;
+    public Transform desiredTransform;
+
+
+    public float transitionSpeed = 20f;
     public GameObject leafPref;
     void Start()
     {
-        currentPos = transform.position;
+        //currentPos = transform.position;
         tubeRenderer = gameObject.AddComponent<TubeRenderer>();
         tubeRenderer.material = material;
 
@@ -44,21 +48,35 @@ public class Branch : MonoBehaviour
     }
     public void UpdateMesh()
     {
-        positions[positions.Count - 1] = currentPos;
+        positions[positions.Count - 1] = transformTop.position = currentPos;
+        transformTop.Translate(new Vector3(-.5f, 1, 2));
+
+        desiredTransform.position = currentPos + (desiredPos - currentPos) * 0.3f;
+        desiredTransform.Translate((positions[positions.Count - 1] - positions[positions.Count - 2]).normalized * 5f);
+
+        //transformTop.rotation = Quaternion.identity;
+        //transformTop.LookAt(desiredTransform, Vector3.left);
+        //transformTop.Rotate(0, 0, Vector3.Angle(desiredTransform.position - transformTop.position, Vector3.up));
+
         if (Vector3.Distance(positions[positions.Count - 1], positions[positions.Count - 2]) > maxSectionSize)
         {
             InsertSection();
         }
-        tubeRenderer.SetPositions(positions.ToArray());
+        if (tubeRenderer != null)
+        {
+            tubeRenderer.SetPositions(positions.ToArray());
+        }
     }
 
     public void SpawnLeaf(GameObject leaf)
     {
-        GameObject newLeaf = Instantiate(leaf.gameObject);
+        GameObject newLeaf = PoolManager.instance.ReuseObject(leaf.gameObject, positions[positions.Count - 2], transform.rotation);
+        newLeaf.GetComponentInChildren<Leaf>().RollOut();
+        //GameObject newLeaf = Instantiate(leaf.gameObject);
 
         //newLeaf.transform.localRotation = (Quaternion.LookRotation(positions[positions.Count - 2] - positions[positions.Count - 1] + Vector3.right));
         newLeaf.transform.Rotate(new Vector3(0, Random.value * 360, 0));
-        newLeaf.transform.position = positions[positions.Count - 2];
+        //newLeaf.transform.position = positions[positions.Count - 2];
     }
 
     void InsertSection()
@@ -79,6 +97,6 @@ public class Branch : MonoBehaviour
     {
         // Draw a yellow sphere at the transform's position
         Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(desiredPos, 1);
+        Gizmos.DrawWireSphere(desiredPos, 1);
     }
 }
