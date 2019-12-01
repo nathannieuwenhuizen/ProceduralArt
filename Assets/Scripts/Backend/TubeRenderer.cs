@@ -8,9 +8,9 @@ using UnityEngine.Serialization;
 public class TubeRenderer : MonoBehaviour
 {
     [SerializeField] public Vector3[] _positions;
-    [SerializeField] public int _sides = 5;
-    [SerializeField] public float _radiusOne = 1;
-    [SerializeField] public float _radiusTwo = 0.2f;
+    [SerializeField] public int _sides = 3;
+    [SerializeField] public float _radiusOne = 1.5f;
+    [SerializeField] public float _radiusTwo = 0.5f;
     [SerializeField] bool _useWorldSpace = false;
     [SerializeField] bool _useTwoRadii = true;
 
@@ -102,6 +102,13 @@ public class TubeRenderer : MonoBehaviour
             var indices = GenerateIndices();
             var uvs = GenerateUVs();
 
+            if (verticesLength != _mesh.vertexCount)
+            {
+                Debug.Log("Difference");
+            } else
+            {
+                Debug.Log("No diff");
+            }
             if (verticesLength > _mesh.vertexCount)
             {
                 _mesh.vertices = _vertices;
