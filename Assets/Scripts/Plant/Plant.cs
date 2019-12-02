@@ -27,7 +27,7 @@ public class Plant : MonoBehaviour
     private GameObject branchObject;
 
     [SerializeField]
-    private float spectrumAmplitude = 2f;
+    private float spectrumAmplitude = 5f;
 
     [SerializeField]
     private GameObject leafObject;
@@ -114,13 +114,13 @@ public class Plant : MonoBehaviour
             }
             Vector3 cameraPos = cameraPivot.position;
             cameraPos.y = topPosition.y;
-            cameraPivot.position = cameraPos;
+            cameraPivot.position = Vector3.Lerp(cameraPivot.position, cameraPos, Time.deltaTime * 10f);
         }
     }
 
     public void UpdateBranchSpectrum(float[] spectrum)
     {
-        if (branches.Count < spectrum.Length)
+        if (true)
         {
             float aspect =  spectrum.Length / branches.Count;
             for (int i = 0; i < branches.Count; i++)
@@ -163,20 +163,29 @@ public class Plant : MonoBehaviour
                 {
                     branches[i].desiredPos.x = Mathf.Cos(Time.time * waveSpeed + (i * .5f)) * waveAmplitude;
                     branches[i].desiredPos.z = (i - (float)branches.Count / 2f) * gapBetweenBranches;
-                    //Debug.Log(branches[i].desiredPos);
                 }
                 break;
             case BranchFormation.circle:
                 for (int i = 0; i < branches.Count; i++)
                 {
                     float circleSpeed = 3f / ( 1 + (float)branches.Count / 2);
-                    float circleSize = Mathf.Max(10, branches.Count * 1);
+                    float circleSize = Mathf.Max(5, (float)branches.Count * 0.8f);
                     branches[i].desiredPos.x = Mathf.Cos(Time.time * circleSpeed + (i * (Mathf.PI * 2f / (float)branches.Count))) * circleSize;
                     branches[i].desiredPos.z = Mathf.Sin(Time.time * circleSpeed + (i * (Mathf.PI * 2f / (float)branches.Count))) * circleSize;
-                    //Debug.Log(branches[i].desiredPos);
                 }
                 break;
 
+            case BranchFormation.stripe:
+                float stripeRotationSpeed = 1f;
+                float branchPadding = 3f;
+
+                for (int i = 0; i < branches.Count; i++)
+                {
+                    branches[i].desiredPos.x = Mathf.Cos(Time.time * stripeRotationSpeed) * (i * branchPadding * 2 -  ((float)branches.Count - 1) * branchPadding);
+                    branches[i].desiredPos.z = Mathf.Sin(Time.time * stripeRotationSpeed) * (i * branchPadding * 2 - ((float)branches.Count - 1) * branchPadding);
+                } 
+
+                break;
         }
     }
 

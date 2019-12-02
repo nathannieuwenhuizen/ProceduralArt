@@ -51,16 +51,40 @@ public class Branch : MonoBehaviour
     public void UpdateMesh()
     {
         //currentPos.y += spectrumOffset;
-        currentPos.y += spectrumOffset;
 
         positions[positions.Count - 1] = transformTop.position = currentPos;
 
-        transformTop.Translate(new Vector3(-.5f, 1, 2));
+        //transformTop.Translate(new Vector3(-.5f, 1, 1.5f));
+        transformTop.localScale = new Vector3(1 + spectrumOffset, 1 + spectrumOffset, 1 + spectrumOffset);
 
         desiredTransform.position = currentPos + (desiredPos - currentPos) * 0.3f;
         desiredTransform.Translate((positions[positions.Count - 1] - positions[positions.Count - 2]).normalized * 5f);
 
+        /*
         //transformTop.rotation = Quaternion.identity;
+        // Determine which direction to rotate towards
+        Vector3 targetDirection = positions[positions.Count - 1] - positions[positions.Count - 2];
+
+        // The step size is equal to speed times frame time.
+        float singleStep = 5f * Time.deltaTime;
+
+        // Rotate the forward vector towards the target direction by one step
+        Vector3 newDirection = Vector3.RotateTowards(transformTop.up, targetDirection, singleStep, 0.0f);
+
+        // Draw a ray pointing at our target in
+        //Debug.DrawRay(transform.position, newDirection, Color.red);
+
+        // Calculate a rotation a step closer to the target and applies rotation to this object
+        transformTop.rotation = Quaternion.LookRotation(newDirection);
+        //transformTop.Rotate(new Vector3(90, 0, 0));
+         */
+
+
+
+
+
+
+
         //transformTop.LookAt(desiredTransform, Vector3.left);
         //transformTop.Rotate(0, 0, Vector3.Angle(desiredTransform.position - transformTop.position, Vector3.up));
 
