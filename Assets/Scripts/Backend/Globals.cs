@@ -8,4 +8,5 @@ static public class Globals
     {
         return Mathf.Max(Mathf.Min(max, val), min);
     }
+    static public Mesh leafMesh;
 }

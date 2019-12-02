@@ -56,7 +56,6 @@ public class Leaf : PoolObject
 
     public override void Destroy()
     {
-        Debug.Log("destroy");
         transform.parent.gameObject.SetActive(false);
         //base.Destroy();
     }
@@ -133,31 +132,40 @@ public class Leaf : PoolObject
         mesh.vertices = vertices;
         if (mesh.triangles.Length != subDivisions * 6)
         {
-
-            int[] triangles = new int[subDivisions * 6];
-            for (int i = 0; i < subDivisions; i++)
+            if (Globals.leafMesh == null)
             {
-                triangles[i * 6] = i * 2;
-                triangles[i * 6 + 1] = i * 2 + 2;
-                triangles[i * 6 + 2] = i * 2 + 1;
+                int[] triangles = new int[subDivisions * 6];
+                for (int i = 0; i < subDivisions; i++)
+                {
+                    triangles[i * 6] = i * 2;
+                    triangles[i * 6 + 1] = i * 2 + 2;
+                    triangles[i * 6 + 2] = i * 2 + 1;
 
-                triangles[i * 6 + 3] = i * 2 + 2;
-                triangles[i * 6 + 4] = i * 2 + 3;
-                triangles[i * 6 + 5] = i * 2 + 1;
-            }
-            mesh.triangles = triangles;
+                    triangles[i * 6 + 3] = i * 2 + 2;
+                    triangles[i * 6 + 4] = i * 2 + 3;
+                    triangles[i * 6 + 5] = i * 2 + 1;
+                }
+                mesh.triangles = triangles;
 
-            mesh.RecalculateBounds();
+                mesh.RecalculateBounds();
 
-            Vector2[] uv = new Vector2[(subDivisions + 1) * 2];
-            for (int i = 0; i < uv.Length - 1; i += 2)
+                Vector2[] uv = new Vector2[(subDivisions + 1) * 2];
+                for (int i = 0; i < uv.Length - 1; i += 2)
+                {
+                    uv[i] = new Vector2(1f, i / (float)(uv.Length - 2) * 1f);
+                    uv[i + 1] = new Vector2(0f, i / (float)(uv.Length - 2) * 1f);
+                }
+
+                mesh.uv = uv;
+
+                Globals.leafMesh = mesh;
+
+            } else
             {
-                uv[i] = new Vector2(1f, i / (float)(uv.Length - 2) * 1f);
-                uv[i + 1] = new Vector2(0f, i / (float)(uv.Length - 2) * 1f);
+                mesh.triangles = Globals.leafMesh.triangles;
+                mesh.RecalculateBounds();
+                mesh.uv = Globals.leafMesh.uv;
             }
-
-            mesh.uv = uv;
-
         }
 
 

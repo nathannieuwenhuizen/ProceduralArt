@@ -104,10 +104,10 @@ public class TubeRenderer : MonoBehaviour
 
             if (verticesLength != _mesh.vertexCount)
             {
-                Debug.Log("Difference");
+                //Debug.Log("Difference");
             } else
             {
-                Debug.Log("No diff");
+                //Debug.Log("No diff");
             }
             if (verticesLength > _mesh.vertexCount)
             {

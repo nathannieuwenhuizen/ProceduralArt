@@ -10,6 +10,8 @@ public class Branch : MonoBehaviour
     private TubeRenderer tubeRenderer;
     private float maxSectionSize = 2f;
     private int maxListSize = 50;
+    public float spectrumOffset = 0f;
+
     public Vector3 currentPos;
     public Vector3 desiredPos;
 
@@ -48,7 +50,11 @@ public class Branch : MonoBehaviour
     }
     public void UpdateMesh()
     {
+        //currentPos.y += spectrumOffset;
+        currentPos.y += spectrumOffset;
+
         positions[positions.Count - 1] = transformTop.position = currentPos;
+
         transformTop.Translate(new Vector3(-.5f, 1, 2));
 
         desiredTransform.position = currentPos + (desiredPos - currentPos) * 0.3f;

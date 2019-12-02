@@ -33,7 +33,7 @@ public class CameraMovement : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("scroll " + Input.GetAxis("Mouse ScrollWheel"));
+        //Debug.Log("scroll " + Input.GetAxis("Mouse ScrollWheel"));
         destZoom += Input.GetAxis("Mouse ScrollWheel") * -20f;
         destZoom = Globals.Cap(destZoom, minZoom, maxZoom);
         currentZoom = Mathf.Lerp(currentZoom, destZoom, Time.deltaTime * zoomSpeed);

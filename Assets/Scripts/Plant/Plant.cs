@@ -27,6 +27,9 @@ public class Plant : MonoBehaviour
     private GameObject branchObject;
 
     [SerializeField]
+    private float spectrumAmplitude = 2f;
+
+    [SerializeField]
     private GameObject leafObject;
 
     [SerializeField]
@@ -54,7 +57,7 @@ public class Plant : MonoBehaviour
     IEnumerator spawningTest()
     {
         yield return new WaitForSeconds(0.5f);
-        SpawnLeafs();
+        //SpawnLeafs();
         StartCoroutine(spawningTest());
     }
 
@@ -112,6 +115,40 @@ public class Plant : MonoBehaviour
             Vector3 cameraPos = cameraPivot.position;
             cameraPos.y = topPosition.y;
             cameraPivot.position = cameraPos;
+        }
+    }
+
+    public void UpdateBranchSpectrum(float[] spectrum)
+    {
+        if (branches.Count < spectrum.Length)
+        {
+            float aspect =  spectrum.Length / branches.Count;
+            for (int i = 0; i < branches.Count; i++)
+            {
+                branches[i].spectrumOffset = spectrum[Mathf.FloorToInt(i * aspect)] * spectrumAmplitude;
+            }
+        }
+    }
+
+    public int AmountOfBranches
+    {
+        get { return branches.Count; }
+        set
+        {
+            if (value > branches.Count)
+            {
+                for (int i = branches.Count; i < value; i++)
+                {
+                    SpawnBranch(branches[branches.Count - 1]);
+                }
+            } else
+            {
+                for (int i = branches.Count; i > value; i--)
+                {
+                    branches[branches.Count - 1].SpawnLeaf(leafObject);
+                    branches.Remove(branches[branches.Count - 1]);
+                }
+            }
         }
     }
     public void UpdateFormation()
