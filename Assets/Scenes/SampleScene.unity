@@ -151,13 +151,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   branchObject: {fileID: 7884164821429236635, guid: 85b02f107153a2645b411b0a9698f18f,
     type: 3}
-  spectrumAmplitude: 0
+  spectrumAmplitude: 5
   leafObject: {fileID: 5333442548132788183, guid: 83cf6a148db0d6a43a775247e0f1c220,
     type: 3}
   verticalSpeed: 0.5
   cameraPivot: {fileID: 1639362295}
   topPosition: {x: 0, y: 0, z: 0}
-  branchFormation: 2
+  branchFormation: 5
 --- !u!4 &114533431
 Transform:
   m_ObjectHideFlags: 0
@@ -4975,7 +4975,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 8494eaf1702c88549ae011008aa9525b, type: 3}
+  m_audioClip: {fileID: 8300000, guid: ab36342a1e570f74ba848ac1cedfcaad, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -5392,7 +5392,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 5.963219e-22, y: 4e-45, z: 1.19900424e-35, w: 1003572.06}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -10789,7 +10789,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ad77bf29e642a542ac660a87cc7b803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: 8494eaf1702c88549ae011008aa9525b, type: 3}
+  clip: {fileID: 8300000, guid: ab36342a1e570f74ba848ac1cedfcaad, type: 3}
   audioS: {fileID: 235960258}
   plant: {fileID: 114533430}
   bpm: 0

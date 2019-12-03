@@ -14,7 +14,8 @@ public enum BranchFormation
     circle,
     stripe,
     wave,
-    flocking
+    flocking,
+    layeredCircle
 }
 public class Plant : MonoBehaviour
 {
@@ -85,13 +86,13 @@ public class Plant : MonoBehaviour
         branch.transform.parent = transform;
         branches.Add(branch);
 
-        Debug.Log("Other: " + OtherBranch);
+        //Debug.Log("Other: " + OtherBranch);
         if (OtherBranch != null)
         {
             branch.SetPos(OtherBranch.currentPos);
         } else
         {
-            Debug.Log("spawns at transform parent");
+            //Debug.Log("spawns at transform parent");
             branch.SetPos(transform.position);
         }
     }
@@ -168,10 +169,44 @@ public class Plant : MonoBehaviour
             case BranchFormation.circle:
                 for (int i = 0; i < branches.Count; i++)
                 {
-                    float circleSpeed = 3f / ( 1 + (float)branches.Count / 2);
+                    float circleSpeed = 3f / (1 + (float)branches.Count / 2);
                     float circleSize = Mathf.Max(5, (float)branches.Count * 0.8f);
                     branches[i].desiredPos.x = Mathf.Cos(Time.time * circleSpeed + (i * (Mathf.PI * 2f / (float)branches.Count))) * circleSize;
                     branches[i].desiredPos.z = Mathf.Sin(Time.time * circleSpeed + (i * (Mathf.PI * 2f / (float)branches.Count))) * circleSize;
+                }
+                break;
+
+            case BranchFormation.layeredCircle:
+                float layeredCircleSpeed = 3f;
+                float layeredCircleSize = 0;
+                float index = Mathf.PI * 2;
+                float branchDistance = 2f;
+                float left = -1;
+                float radianDistance = branchDistance;
+                for (int i = 0; i < branches.Count; i++)
+                {
+                    branches[i].desiredPos.x = Mathf.Cos(Time.time * layeredCircleSpeed * left + index) * layeredCircleSize;
+                    branches[i].desiredPos.z = Mathf.Sin(Time.time * layeredCircleSpeed * left + index) * layeredCircleSize;
+
+                    if (i == branches.Count - 1)
+                    {
+                        Debug.Log("index is: " + index); 
+                    }
+
+                    index += radianDistance;
+                    if (index + (radianDistance / 2) >=  Mathf.PI * 2)
+                    {
+                        //Debug.Log("new layer!");
+                        index = 0;
+                        layeredCircleSize += 8f;
+                        layeredCircleSpeed = 3f / (layeredCircleSize / 8f);
+                        radianDistance = branchDistance / (layeredCircleSize / 8f);
+                        if (((branches.Count - 1) - i) * radianDistance < Mathf.PI * 2)
+                        {
+                            radianDistance = (Mathf.PI * 2) / ((branches.Count - 1) - i);
+                        }
+                        left = left == 1 ? -1 : 1;
+                    }
                 }
                 break;
 
