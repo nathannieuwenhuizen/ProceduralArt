@@ -42,8 +42,8 @@ public class Plant : MonoBehaviour
     public Vector3 topPosition;
 
     private PlantState state = PlantState.growing;
-    [SerializeField]
-    private BranchFormation branchFormation = BranchFormation.circle;
+    public BranchFormation branchFormation = BranchFormation.circle;
+
     void Start()
     {
         topPosition = transform.position;
@@ -52,14 +52,6 @@ public class Plant : MonoBehaviour
         StartGrowing();
 
         PoolManager.instance.CreatePool(leafObject, 2);
-        StartCoroutine(spawningTest());
-
-    }
-    IEnumerator spawningTest()
-    {
-        yield return new WaitForSeconds(0.5f);
-        //SpawnLeafs();
-        StartCoroutine(spawningTest());
     }
 
     public void SpawnLeafs()
@@ -76,7 +68,8 @@ public class Plant : MonoBehaviour
     }
     public void End()
     {
-
+        state = PlantState.blossoming;
+        AmountOfBranches = 0;
     }
     public void SpawnBranch(Branch OtherBranch = null)
     {
@@ -111,8 +104,9 @@ public class Plant : MonoBehaviour
             topPosition.y += verticalSpeed;
             for (int i = 0; i < branches.Count; i++)
             {
-                branches[i].Grow(topPosition.y);
+                branches[i].Grow(topPosition.y, branchFormation != BranchFormation.random);
             }
+
             Vector3 cameraPos = cameraPivot.position;
             cameraPos.y = topPosition.y;
             cameraPivot.position = Vector3.Lerp(cameraPivot.position, cameraPos, Time.deltaTime * 10f);
@@ -140,17 +134,27 @@ public class Plant : MonoBehaviour
             {
                 for (int i = branches.Count; i < value; i++)
                 {
-                    SpawnBranch(branches[branches.Count - 1]);
+                    SpawnBranch(branches[Random.Range(0, branches.Count - 1)]);
                 }
             } else
             {
                 for (int i = branches.Count; i > value; i--)
                 {
                     branches[branches.Count - 1].SpawnLeaf(leafObject);
-                    branches.Remove(branches[branches.Count - 1]);
+                    branches.Remove(branches[Random.Range(0, value - 1)]);
                 }
             }
         }
+    }
+
+    public void RandomPos()
+    {
+        for (int i = 0; i < branches.Count; i++)
+        {
+            float range = (float)branches.Count * .5f;
+            branches[i].desiredPos = new Vector3(Random.Range(-range, range), topPosition.y, Random.Range(-range, range));
+        }
+
     }
     public void UpdateFormation()
     {

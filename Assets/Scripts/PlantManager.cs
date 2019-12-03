@@ -122,6 +122,10 @@ public class PlantManager : MonoBehaviour
         if (beats % 2 == 0)
         {
             plant.SpawnLeafs();
+            if (plant.branchFormation == BranchFormation.random)
+            {
+                plant.RandomPos();
+            }
         }
         //Debug.Log("bam! " + beats);
     }

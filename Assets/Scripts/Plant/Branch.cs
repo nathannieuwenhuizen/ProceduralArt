@@ -14,6 +14,7 @@ public class Branch : MonoBehaviour
 
     public Vector3 currentPos;
     public Vector3 desiredPos;
+    public Vector3 currentSpeed;
 
     public List<Vector3> positions;
 
@@ -39,12 +40,29 @@ public class Branch : MonoBehaviour
         positions = new List<Vector3> { position, position };
     }
 
-    public void Grow(float yPos)
+    public void Grow(float yPos, bool forcedLerp = true)
     {
         desiredPos.y = yPos;
-        currentPos = Vector3.Lerp(currentPos, desiredPos, Time.deltaTime * transitionSpeed);
-        //currentPos += (desiredPos - currentPos) *0.01f;
-        //currentPos = desiredPos;
+        if (!forcedLerp)
+        {
+            currentSpeed.Normalize();
+            currentSpeed += (desiredPos - currentPos) * 0.005f;
+
+        } else
+        {
+            Vector3 deltaSpeed = (Vector3.Lerp(currentPos, desiredPos, Time.deltaTime * transitionSpeed) - currentPos) - currentSpeed;
+            if (Vector3.Distance(deltaSpeed, currentSpeed) > 3f)
+            {
+                //currentSpeed.Normalize();
+                currentSpeed += deltaSpeed * 0.2f;
+
+            } else
+            {
+                currentSpeed += deltaSpeed;
+            }
+        }
+        currentPos += currentSpeed;
+
         currentPos.y = yPos;
         UpdateMesh();
     }
