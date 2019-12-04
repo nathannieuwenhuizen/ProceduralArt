@@ -35,6 +35,16 @@ public class PlantManager : MonoBehaviour
         processor.onBeat.AddListener(onOnbeatDetected);
         processor.onSpectrum.AddListener(onSpectrum);
     }
+    private void Update()
+    {
+        if (!audioS.isPlaying)
+        {
+            if (plant.state != PlantState.blossoming)
+            {
+                plant.End();
+            }
+        }
+    }
 
     void onOnbeatDetected()
     {
@@ -60,7 +70,7 @@ public class PlantManager : MonoBehaviour
         {
             Vector3 start = new Vector3(i, 0, 0);
             Vector3 end = new Vector3(i, smoothSpectrum[i] * 10, 0);
-            Debug.DrawLine(start, end, Color.red);
+            //Debug.DrawLine(start, end, Color.red);
         }
     }
     public void UpdateSpectrum(float[] input)

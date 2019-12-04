@@ -40,25 +40,31 @@ public class Branch : MonoBehaviour
         positions = new List<Vector3> { position, position };
     }
 
-    public void Grow(float yPos, bool forcedLerp = true)
+    public void Grow(float yPos, bool forcedLerp = true, bool updateSpeed = true)
     {
-        desiredPos.y = yPos;
-        if (!forcedLerp)
+        if (updateSpeed)
         {
-            currentSpeed.Normalize();
-            currentSpeed += (desiredPos - currentPos) * 0.005f;
+            desiredPos.y = yPos;
 
-        } else
-        {
-            Vector3 deltaSpeed = (Vector3.Lerp(currentPos, desiredPos, Time.deltaTime * transitionSpeed) - currentPos) - currentSpeed;
-            if (Vector3.Distance(deltaSpeed, currentSpeed) > 3f)
+            if (!forcedLerp)
             {
-                //currentSpeed.Normalize();
-                currentSpeed += deltaSpeed * 0.2f;
+                currentSpeed.Normalize();
+                currentSpeed += (desiredPos - currentPos) * 0.005f;
 
-            } else
+            }
+            else
             {
-                currentSpeed += deltaSpeed;
+                Vector3 deltaSpeed = (Vector3.Lerp(currentPos, desiredPos, Time.deltaTime * transitionSpeed) - currentPos) - currentSpeed;
+                if (Vector3.Distance(deltaSpeed, currentSpeed) > 3f)
+                {
+                    //currentSpeed.Normalize();
+                    currentSpeed += deltaSpeed * 0.2f;
+
+                }
+                else
+                {
+                    currentSpeed += deltaSpeed;
+                }
             }
         }
         currentPos += currentSpeed;
@@ -68,11 +74,8 @@ public class Branch : MonoBehaviour
     }
     public void UpdateMesh()
     {
-        //currentPos.y += spectrumOffset;
-
         positions[positions.Count - 1] = transformTop.position = currentPos;
 
-        //transformTop.Translate(new Vector3(-.5f, 1, 1.5f));
         transformTop.localScale = new Vector3(1 + spectrumOffset, 1 + spectrumOffset, 1 + spectrumOffset);
 
         desiredTransform.position = currentPos + (desiredPos - currentPos) * 0.3f;
@@ -140,6 +143,12 @@ public class Branch : MonoBehaviour
         {
             positions.Add(currentPos);
         }
+    }
+    public void End(GameObject blossomObject)
+    {
+        Instantiate(blossomObject, transform).transform.position = transformTop.position;
+
+        transformTop.gameObject.SetActive(false);
     }
     void OnDrawGizmosSelected()
     {

@@ -29,6 +29,8 @@ public class Leaf : PoolObject
     private MeshFilter _meshFilter;
     private MeshRenderer _meshRenderer;
 
+    public bool disappear = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -80,8 +82,11 @@ public class Leaf : PoolObject
             yield return new WaitForSeconds(1f/60f);
         }
 
-        yield return new WaitForSeconds(2f);
-        Destroy();
+        if (disappear)
+        {
+            yield return new WaitForSeconds(2f);
+            Destroy();
+        }
     }
 
     List<Vector2> CalculateEulerSpiral(float T, float steps, float size = 10f)

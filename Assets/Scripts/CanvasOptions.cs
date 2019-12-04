@@ -22,7 +22,7 @@ public class CanvasOptions : MonoBehaviour
     {
         plant.AmountOfBranches = (int)branchSlider.value;
 
-        Debug.Log(branchSlider.value);
+        //Debug.Log(branchSlider.value);
     }
 
     // Update is called once per frame

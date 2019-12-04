@@ -39,9 +39,15 @@ public class Plant : MonoBehaviour
     [SerializeField]
     private Transform cameraPivot;
 
+    [SerializeField]
+    private GameObject flowerObject;
+
+    [SerializeField]
+    private GameObject finalFlowerObject;
+
     public Vector3 topPosition;
 
-    private PlantState state = PlantState.growing;
+    public PlantState state = PlantState.growing;
     public BranchFormation branchFormation = BranchFormation.circle;
 
     void Start()
@@ -104,7 +110,7 @@ public class Plant : MonoBehaviour
             topPosition.y += verticalSpeed;
             for (int i = 0; i < branches.Count; i++)
             {
-                branches[i].Grow(topPosition.y, branchFormation != BranchFormation.random);
+                branches[i].Grow(topPosition.y, branchFormation != BranchFormation.random, branchFormation != BranchFormation.flocking);
             }
 
             Vector3 cameraPos = cameraPivot.position;
@@ -140,8 +146,16 @@ public class Plant : MonoBehaviour
             {
                 for (int i = branches.Count; i > value; i--)
                 {
-                    branches[branches.Count - 1].SpawnLeaf(leafObject);
-                    branches.Remove(branches[Random.Range(0, value - 1)]);
+                    int index = Random.Range(0, value - 1);
+                    if (state == PlantState.blossoming)
+                    {
+                        branches[index].End(finalFlowerObject);
+                    }
+                    else
+                    {
+                        branches[index].End(flowerObject);
+                    }
+                    branches.Remove(branches[index]);
                 }
             }
         }
@@ -160,6 +174,9 @@ public class Plant : MonoBehaviour
     {
         switch (branchFormation)
         {
+            case BranchFormation.flocking:
+                UpdateFlocking();
+                break;
             case BranchFormation.wave:
                 float waveSpeed = 3f;
                 float waveAmplitude = 10f;
@@ -226,6 +243,80 @@ public class Plant : MonoBehaviour
 
                 break;
         }
+    }
+    public void UpdateFlocking()
+    {
+        for (int i = 0; i < branches.Count; i++)
+        {
+            Vector3 seperationDir, cohesionDir, allignDir;
+
+
+            allignDir = new Vector3();
+            List<Branch> allignNeighbours = Neighbours(branches[i], 6f);
+            for (int j = 0; j < allignNeighbours.Count; j++)
+            {
+                allignDir += allignNeighbours[j].currentSpeed;
+            }
+            allignDir /= allignNeighbours.Count;
+            allignDir.Normalize();
+
+
+            cohesionDir = new Vector3();
+            List<Branch> cohesionNeighbours = Neighbours(branches[i], 10f);
+            for (int j = 0; j < cohesionNeighbours.Count; j++)
+            {
+                cohesionDir += cohesionNeighbours[j].currentPos;
+            }
+            cohesionDir /= cohesionNeighbours.Count;
+            cohesionDir -= branches[i].currentPos;
+            cohesionDir.Normalize();
+
+            seperationDir = new Vector3();
+            List<Branch> seperationNeighbours = Neighbours(branches[i], 3f);
+            for (int j = 0; j < seperationNeighbours.Count; j++)
+            {
+                seperationDir -= (seperationNeighbours[j].currentPos - branches[i].currentPos) / Vector3.Distance(seperationNeighbours[j].currentPos, branches[i].currentPos);
+            }
+            //seperationDir *= -1f;
+            seperationDir.Normalize();
+
+
+            Vector3 newSpeed = (allignDir + cohesionDir + seperationDir * 3f).normalized;
+            if (i == 0)
+            {
+                Debug.Log("speed: " + cohesionDir + " | " + seperationDir + " | " + allignDir );
+            }
+            Debug.DrawLine(branches[i].currentPos, branches[i].currentPos + allignDir * 2f, Color.green);
+            Debug.DrawLine(branches[i].currentPos, branches[i].currentPos + cohesionDir * 2f, Color.red);
+            Debug.DrawLine(branches[i].currentPos, branches[i].currentPos + seperationDir * 2f, Color.blue);
+
+
+            if (newSpeed.x == 0 && newSpeed.z == 0)
+            {
+                newSpeed = new Vector3(Random.value, Random.value, Random.value);
+            }
+
+            newSpeed = (newSpeed + (topPosition - branches[i].currentPos) * 0.5f).normalized;
+            newSpeed *= 0.04f;
+
+            branches[i].currentSpeed += newSpeed;
+        }
+    }
+
+    public List<Branch> Neighbours(Branch branch, float maxDistance)
+    {
+        List<Branch> result = new List<Branch>();
+        for (int i = 0; i < branches.Count; i++)
+        {
+            if (branch != branches[i])
+            {
+                if (Vector3.Distance(branch.currentPos, branches[i].currentPos) < maxDistance) {
+                    result.Add(branches[i]);
+                }
+
+            }
+        }
+        return result;
     }
 
 }
