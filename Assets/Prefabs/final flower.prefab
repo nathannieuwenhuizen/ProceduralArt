@@ -47,3 +47,4 @@ MonoBehaviour:
   layerAmount: 4
   flowerLeaf: {fileID: 1570226159254144693, guid: 97f13fa8675263b40823ac0ee26381f8,
     type: 3}
+  idle: 1

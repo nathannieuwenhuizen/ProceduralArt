@@ -28,13 +28,13 @@ public class Plant : MonoBehaviour
     private GameObject branchObject;
 
     [SerializeField]
-    private float spectrumAmplitude = 5f;
+    public float spectrumAmplitude = 5f;
 
     [SerializeField]
     private GameObject leafObject;
 
     [SerializeField]
-    private float verticalSpeed = 1f;
+    public float verticalSpeed = 1f;
 
     [SerializeField]
     private Transform cameraPivot;
@@ -45,6 +45,9 @@ public class Plant : MonoBehaviour
     [SerializeField]
     private GameObject finalFlowerObject;
 
+    [SerializeField]
+    private ParticleSystem groundBusrtParticle;
+
     public Vector3 topPosition;
 
     public PlantState state = PlantState.growing;
@@ -54,8 +57,6 @@ public class Plant : MonoBehaviour
     {
         topPosition = transform.position;
         branches = new List<Branch>();
-
-        StartGrowing();
 
         PoolManager.instance.CreatePool(leafObject, 2);
     }
@@ -70,6 +71,7 @@ public class Plant : MonoBehaviour
     public void StartGrowing()
     {
         state = PlantState.growing;
+        groundBusrtParticle.Play();
         SpawnBranch();
     }
     public void End()
@@ -121,7 +123,7 @@ public class Plant : MonoBehaviour
 
     public void UpdateBranchSpectrum(float[] spectrum)
     {
-        if (true)
+        if (spectrum.Length != 0 && branches.Count != 0)
         {
             float aspect =  spectrum.Length / branches.Count;
             for (int i = 0; i < branches.Count; i++)

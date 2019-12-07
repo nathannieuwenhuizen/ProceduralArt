@@ -13,7 +13,8 @@ public class Flower : MonoBehaviour
     [SerializeField]
     private GameObject flowerLeaf;
 
-
+    [SerializeField]
+    private bool idle = false;
     private void Start()
     {
         Blossom();
@@ -29,7 +30,7 @@ public class Flower : MonoBehaviour
                 newLeaf.transform.Rotate(new Vector3(0, 360 / amountPerLayer * j + ((i % 2) * 360 / amountPerLayer), 0));
                 newLeaf.transform.Translate(new Vector3(0, (float)i / 2f, 0));
                 newLeaf.transform.parent.transform.localScale = new Vector3(1f / ((float)i + 1f), 1 / ((float)i + 1f), 1f / ((float)i + 1f));
-                newLeaf.RollOut();
+                newLeaf.RollOut(idle);
             }
         }
     }

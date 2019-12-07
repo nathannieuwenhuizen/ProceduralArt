@@ -18,6 +18,9 @@ public class CameraMovement : MonoBehaviour
     private float currentZoom;
     [SerializeField]
     private float destZoom;
+
+    public Vector2 angleSpeed = new Vector2(3f, 0);
+
     [SerializeField]
     private float zoomSpeed = 5f;
 
@@ -43,9 +46,13 @@ public class CameraMovement : MonoBehaviour
         delta *= currentZoom;
         cameraTransform.position = transform.position + delta;
 
+        angleDelta = angleSpeed;
 
-        angleDelta.y = -Input.GetAxis("Horizontal");
-        angleDelta.x = Input.GetAxis("Vertical");
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        {
+            angleDelta.y = -Input.GetAxis("Horizontal");
+            angleDelta.x = Input.GetAxis("Vertical");
+        }
 
         transform.Rotate(angleDelta * speed);
         Quaternion q = transform.rotation;

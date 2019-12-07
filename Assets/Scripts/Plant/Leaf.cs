@@ -62,17 +62,17 @@ public class Leaf : PoolObject
         //base.Destroy();
     }
 
-    public void RollOut()
+    public void RollOut(bool idle = false)
     {
         StopAllCoroutines();
         if (mesh == null)
         {
             Setup();
         }
-        StartCoroutine(RollingOut());
+        StartCoroutine(RollingOut(idle));
     }
 
-    IEnumerator RollingOut()
+    IEnumerator RollingOut(bool idle = false)
     {
         float i = beginstand;
         while (i > endStand + 0.1f)
@@ -86,6 +86,13 @@ public class Leaf : PoolObject
         {
             yield return new WaitForSeconds(2f);
             Destroy();
+        }
+        float j = 0;
+        while (idle)
+        {
+            UpdateMesh(CalculateEulerSpiral(endStand + Mathf.Sin(j + (1f / 60f)) * 0.1f, subDivisions, planeSize.y));
+            j += 1f / 60f;
+            yield return new WaitForSeconds(1f / 60f);
         }
     }
 
