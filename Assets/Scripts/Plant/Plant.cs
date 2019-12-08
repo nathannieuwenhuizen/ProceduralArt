@@ -74,11 +74,26 @@ public class Plant : MonoBehaviour
         groundBusrtParticle.Play();
         SpawnBranch();
     }
+
+    private bool blossoming = false;
     public void End()
     {
-        state = PlantState.blossoming;
-        AmountOfBranches = 0;
+        if (!blossoming)
+        {
+            blossoming = true;
+            StartCoroutine(Ending());
+        }
     }
+    IEnumerator Ending()
+    {
+        while (AmountOfBranches > 0)
+        {
+            AmountOfBranches--;
+            yield return new WaitForSeconds((60f / PlantManager.instance.bpm) * .5f);
+        }
+        state = PlantState.blossoming;
+    }
+
     public void SpawnBranch(Branch OtherBranch = null)
     {
 
@@ -149,7 +164,7 @@ public class Plant : MonoBehaviour
                 for (int i = branches.Count; i > value; i--)
                 {
                     int index = Random.Range(0, value - 1);
-                    if (state == PlantState.blossoming)
+                    if (branches.Count == 1)
                     {
                         branches[index].End(finalFlowerObject);
                     }
@@ -211,10 +226,10 @@ public class Plant : MonoBehaviour
                     branches[i].desiredPos.x = Mathf.Cos(Time.time * layeredCircleSpeed * left + index) * layeredCircleSize;
                     branches[i].desiredPos.z = Mathf.Sin(Time.time * layeredCircleSpeed * left + index) * layeredCircleSize;
 
-                    if (i == branches.Count - 1)
-                    {
-                        Debug.Log("index is: " + index); 
-                    }
+                    //if (i == branches.Count - 1)
+                    //{
+                    //    Debug.Log("index is: " + index); 
+                    //}
 
                     index += radianDistance;
                     if (index + (radianDistance / 2) >=  Mathf.PI * 2)
@@ -288,9 +303,9 @@ public class Plant : MonoBehaviour
             {
                 Debug.Log("speed: " + cohesionDir + " | " + seperationDir + " | " + allignDir );
             }
-            Debug.DrawLine(branches[i].currentPos, branches[i].currentPos + allignDir * 2f, Color.green);
-            Debug.DrawLine(branches[i].currentPos, branches[i].currentPos + cohesionDir * 2f, Color.red);
-            Debug.DrawLine(branches[i].currentPos, branches[i].currentPos + seperationDir * 2f, Color.blue);
+            //Debug.DrawLine(branches[i].currentPos, branches[i].currentPos + allignDir * 2f, Color.green);
+            //Debug.DrawLine(branches[i].currentPos, branches[i].currentPos + cohesionDir * 2f, Color.red);
+            //Debug.DrawLine(branches[i].currentPos, branches[i].currentPos + seperationDir * 2f, Color.blue);
 
 
             if (newSpeed.x == 0 && newSpeed.z == 0)

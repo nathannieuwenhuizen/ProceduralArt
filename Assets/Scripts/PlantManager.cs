@@ -203,31 +203,37 @@ public class PlantManager : MonoBehaviour
     }
     public void OnFourBPM()
     {
-        //plant.verticalSpeed = 0.5f + audioSeedValue;
     }
     public void OnEightBPM()
     {
-        if (!plantIncreasing)
-        {
-            if (audioSeedValue < 0.5f && plant.AmountOfBranches > 2)
-            {
-                plant.AmountOfBranches--;
-            }
-            else
-            {
-                plant.AmountOfBranches++;
-            }
-        }
+        colorMaterialChanger.Pulse();
+
+        //plant.verticalSpeed = 0.5f + audioSeedValue;
+
+        //if (!plantIncreasing)
+        //{
+        //    if (audioSeedValue < 0.5f && plant.AmountOfBranches > 2)
+        //    {
+        //        plant.AmountOfBranches--;
+        //    }
+        //    else
+        //    {
+        //        plant.AmountOfBranches++;
+        //    }
+        //}
     }
     public void OnSixTeenBPM()
     {
         if (camMovement.angleSpeed.y == 0)
         {
-            camMovement.angleSpeed.y = (Mathf.Max(0.3f,audioSeedValue) * 2f - 1f) * .1f;
+            camMovement.angleSpeed.y = (audioSeedValue * 2f - 1f) * .3f;
         } else
         {
             camMovement.angleSpeed.y = 0;
         }
+
+        StartCoroutine(camMovement.ChangingXAngle( 80f * audioSeedValue - 40f));
+
         if (!plantIncreasing)
         {
             StartCoroutine(
@@ -238,7 +244,6 @@ public class PlantManager : MonoBehaviour
 
     public void OnThirtyTwoBPM()
     {
-        colorMaterialChanger.Pulse();
         Array values = Enum.GetValues(typeof(BranchFormation));
         plant.branchFormation = (BranchFormation)values.GetValue((int)(Mathf.Floor(audioSeedValue * values.Length)));
     }
@@ -255,9 +260,9 @@ public class PlantManager : MonoBehaviour
                 plant.AmountOfBranches += increasing ? 1 : -1;
             } else
             {
-                plant.AmountOfBranches += increasing ? 2 : -2;
+                plant.AmountOfBranches += increasing ? 1 : -1;
             }
-            yield return new WaitForSeconds(60f / (float)bpm);
+            yield return new WaitForSeconds(30f / (float)bpm);
         }
         plantIncreasing = false;
     }

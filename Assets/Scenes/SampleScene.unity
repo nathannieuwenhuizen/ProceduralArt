@@ -516,7 +516,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -718,7 +718,7 @@ MonoBehaviour:
   m_Direction: 0
   m_MinValue: 0
   m_MaxValue: 10
-  m_WholeNumbers: 1
+  m_WholeNumbers: 0
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
@@ -777,7 +777,7 @@ MonoBehaviour:
   groundBusrtParticle: {fileID: 212347400}
   topPosition: {x: 0, y: 0, z: 0}
   state: 0
-  branchFormation: 3
+  branchFormation: 1
 --- !u!4 &114533431
 Transform:
   m_ObjectHideFlags: 0
@@ -875,15 +875,15 @@ MonoBehaviour:
   m_FillRect: {fileID: 2121062292}
   m_HandleRect: {fileID: 1409651537}
   m_Direction: 0
-  m_MinValue: -3
-  m_MaxValue: 3
-  m_WholeNumbers: 1
-  m_Value: 1
+  m_MinValue: -1
+  m_MaxValue: 1
+  m_WholeNumbers: 0
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 624319773}
-        m_MethodName: ValueChangeCheck
+        m_MethodName: UpdateCameraRot
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6642,14 +6642,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3e250ea6b09efd47ac230378c63cad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  branchSlider: {fileID: 1136270811}
-  branchText: {fileID: 992895715}
   plant: {fileID: 114533430}
+  camMovement: {fileID: 1639362296}
   clips:
   - {fileID: 8300000, guid: 8494eaf1702c88549ae011008aa9525b, type: 3}
-  - {fileID: 8300000, guid: b8e40e8337f34e846a2f461923cfce8d, type: 3}
+  - {fileID: 8300000, guid: 5d33d89e123a60e4f976d8f83788372c, type: 3}
+  - {fileID: 8300000, guid: c3191cf1ba0a5534ea4ad79692228d33, type: 3}
+  - {fileID: 8300000, guid: e0c551b3b74c7124e90ad3daa1ca3b69, type: 3}
+  - {fileID: 8300000, guid: 969fc066ca10eb241a776adffadd2360, type: 3}
+  - {fileID: 8300000, guid: dedb26197bb76e54c904241662708cc7, type: 3}
   - {fileID: 8300000, guid: ab36342a1e570f74ba848ac1cedfcaad, type: 3}
+  - {fileID: 8300000, guid: 6effe5101b6b8ad4e93d1b775039925b, type: 3}
+  - {fileID: 8300000, guid: 96416e08ae55c224daa3faf26f83226a, type: 3}
   clipsDropDown: {fileID: 20888819}
+  branchSlider: {fileID: 1136270811}
+  branchText: {fileID: 992895715}
+  autoToggle: {fileID: 1480591066}
+  cameraRotSlider: {fileID: 118297569}
+  verticalSlider: {fileID: 847379785}
+  spectrumSlider: {fileID: 109020846}
+  formationDorpDown: {fileID: 930899355}
 --- !u!114 &624319774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6684,7 +6696,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 400, y: 375}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0.561
+  m_MatchWidthOrHeight: 0.393
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -7048,8 +7060,8 @@ RectTransform:
   m_Father: {fileID: 161578291}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.1, y: 0}
+  m_AnchorMax: {x: 0.1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -7122,7 +7134,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -7247,13 +7259,13 @@ MonoBehaviour:
   m_Direction: 0
   m_MinValue: -3
   m_MaxValue: 3
-  m_WholeNumbers: 1
+  m_WholeNumbers: 0
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 624319773}
-        m_MethodName: ValueChangeCheck
+        m_MethodName: UpdateVerticalSpeed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7601,8 +7613,8 @@ RectTransform:
   m_Father: {fileID: 1278658654}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.6666667, y: 0}
+  m_AnchorMax: {x: 0.6666667, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -7736,7 +7748,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 624319773}
-        m_MethodName: SelectClip
+        m_MethodName: UpdateFormation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8727,17 +8739,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1284189353}
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
       - m_Target: {fileID: 1365915838}
         m_MethodName: SetActive
         m_Mode: 6
@@ -8748,6 +8749,17 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1468096470}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &1284189356
 MonoBehaviour:
@@ -8800,7 +8812,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1365915839
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13687,7 +13699,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.6666667, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -13759,8 +13771,8 @@ RectTransform:
   m_Father: {fileID: 225633926}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -13906,7 +13918,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ad77bf29e642a542ac660a87cc7b803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: ab36342a1e570f74ba848ac1cedfcaad, type: 3}
+  clip: {fileID: 8300000, guid: 8494eaf1702c88549ae011008aa9525b, type: 3}
   audioS: {fileID: 235960258}
   plant: {fileID: 114533430}
   camMovement: {fileID: 1639362296}
@@ -14150,7 +14162,18 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 624319773}
+        m_MethodName: ValueChangeCheck
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1 &1504720120
 GameObject:
@@ -14404,7 +14427,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -15178,6 +15201,17 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 1516267723}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1468096470}
         m_MethodName: SetActive
         m_Mode: 6
         m_Arguments:
@@ -16164,7 +16198,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

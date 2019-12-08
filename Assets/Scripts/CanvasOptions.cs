@@ -70,12 +70,9 @@ public class CanvasOptions : MonoBehaviour
         plant.AmountOfBranches = (int)branchSlider.value;
         branchText.text = plant.AmountOfBranches + " branches";
 
-        camMovement.angleSpeed.y = cameraRotSlider.value;
-        plant.verticalSpeed = verticalSlider.value;
         plant.spectrumAmplitude = spectrumSlider.value;
 
         PlantManager.instance.autoChange = autoToggle.isOn;
-        plant.branchFormation = (BranchFormation)formationDorpDown.value;
     }
     public void UpdateOptions()
     {
@@ -90,6 +87,19 @@ public class CanvasOptions : MonoBehaviour
 
         autoToggle.isOn = PlantManager.instance.autoChange;
 
+    }
+
+    public void UpdateCameraRot()
+    {
+        camMovement.angleSpeed.y = cameraRotSlider.value;
+    }
+    public void UpdateVerticalSpeed()
+    {
+        plant.verticalSpeed = verticalSlider.value;
+    }
+    public void  UpdateFormation()
+    {
+        plant.branchFormation = (BranchFormation)formationDorpDown.value;
     }
     public void SelectClip()
     {

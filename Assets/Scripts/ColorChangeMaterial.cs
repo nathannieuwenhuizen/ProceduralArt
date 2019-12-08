@@ -12,7 +12,7 @@ public class ColorChangeMaterial : MonoBehaviour
     public void Setup(Material _mat)
     {
         material = _mat;
-        currentColor = new Color(0.5f,0.8f,0.5f);
+        currentColor = new Color(0.3f,0.9f,0.3f);
         material.SetColor("_Color", currentColor);
 
     }

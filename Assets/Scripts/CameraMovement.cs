@@ -34,6 +34,36 @@ public class CameraMovement : MonoBehaviour
         destZoom = currentZoom = minZoom + (maxZoom - minZoom) * 0.5f;
     }
 
+    public IEnumerator ChangingXAngle(float destAngle)
+    {
+        Quaternion q = transform.rotation;
+        Vector3 cappedRot = new Vector3(q.eulerAngles.x, q.eulerAngles.y, 0);
+        if (destAngle < 0)
+        {
+            while (cappedRot.x > 360 + destAngle || cappedRot.x <= 180)
+            {
+                q = transform.rotation;
+                cappedRot = new Vector3(q.eulerAngles.x, q.eulerAngles.y, 0);
+                angleSpeed.x = -0.1f;
+                yield return new WaitForFixedUpdate();
+            }
+        } else
+        {
+            while (cappedRot.x < destAngle || cappedRot.x >= 180)
+            {
+                Debug.Log("hello" + cappedRot.x + "| " + destAngle);
+                q = transform.rotation;
+                cappedRot = new Vector3(q.eulerAngles.x, q.eulerAngles.y, 0);
+                angleSpeed.x = 0.1f;
+                yield return new WaitForFixedUpdate();
+            }
+            Debug.Log("end");
+
+        }
+        angleSpeed.x = 0;
+        Debug.Log("wtf");
+
+    }
     void Update()
     {
         //Debug.Log("scroll " + Input.GetAxis("Mouse ScrollWheel"));
